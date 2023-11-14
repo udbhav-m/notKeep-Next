@@ -1,7 +1,7 @@
 # Not-Keep - Notes App
 Not-Keep is a full-stack notes app built with Next.js for the frontend, Recoil for state management, Tailwind CSS for styling, Shadcdn UI for components, and authentication using JSON Web Tokens (JWT). The app allows users to perform CRUD (Create, Read, Update, Delete) operations on their notes and includes a search bar for easy navigation.
 
-## Features
+# Features
 Create Notes: Add new notes with a title and description.
 Read Notes: View a list of all notes with the option to mark them as done, edit, or delete.
 Update Notes: Edit existing notes to update titles or descriptions.
