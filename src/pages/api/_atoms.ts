@@ -88,7 +88,7 @@ export const overlayProps = atom({
     id: "",
     title: "",
     description: "",
-    done: false,
+    token: "",
   },
 });
 

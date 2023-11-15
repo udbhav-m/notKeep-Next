@@ -1,14 +1,17 @@
 import { useTheme } from "next-themes";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { SetterOrUpdater, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   archiveState,
+  errorState,
+  messageState,
   overlayProps,
   overlayState,
   trashState,
 } from "../api/_atoms";
-import deleteTodo, { undoDelete } from "../functionality/DeleteNote";
-import archiveTodo, { undoArchive } from "../functionality/ArchiveNote";
-import doneTodo, { undoDone } from "../functionality/DoneNotes";
+// import deleteTodo, { undoDelete } from "../functionality/DeleteNote";
+// import archiveTodo, { undoArchive } from "../functionality/ArchiveNote";
+// import doneTodo, { undoDone } from "../functionality/DoneNotes";
+import axios from "axios";
 
 export default function Note(props: any) {
   const { theme } = useTheme();
@@ -16,16 +19,9 @@ export default function Note(props: any) {
   const setProps = useSetRecoilState(overlayProps);
   const archive = useRecoilValue(archiveState);
   const trash = useRecoilValue(trashState);
-  const {
-    id,
-    title,
-    description,
-    done,
-    token,
-    fetchNotes,
-    setError,
-    setMessage,
-  } = props;
+  const setError = useSetRecoilState(errorState);
+  const setMessage = useSetRecoilState(messageState);
+  const { id, title, description, done, token, fetchNotes } = props;
 
   const handleDelete = () => {
     deleteTodo(id, token, fetchNotes, setError, setMessage);
@@ -64,7 +60,12 @@ export default function Note(props: any) {
       <div
         onClick={() => {
           setOverlay(true);
-          setProps({ id, title, description, done });
+          setProps({
+            id,
+            title,
+            description,
+            token,
+          });
         }}
         className="flex flex-col break-words overflow-hidden"
       >
@@ -144,4 +145,220 @@ export default function Note(props: any) {
       </div>
     </div>
   );
+}
+
+async function archiveTodo(
+  id: string,
+  token: any,
+  fetchNotes: () => void,
+  setError: SetterOrUpdater<boolean>,
+  setMessage: SetterOrUpdater<string>
+) {
+  try {
+    const archiveAPI = await axios.put(
+      `/api/archive/${id}`,
+      { archive: true },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+      }
+    );
+    const archiveData = archiveAPI.data;
+    console.log(archiveData);
+    if (archiveData.error && archiveData.error != undefined) {
+      throw new Error(archiveData.error);
+    }
+    if (archiveData.message) {
+      fetchNotes();
+    }
+  } catch (err: any) {
+    setError(true);
+    setMessage(err.message);
+    setTimeout(() => {
+      setError(false);
+      setMessage("");
+    }, 5000);
+  }
+}
+
+export async function undoArchive(
+  id: string,
+  token: any,
+  fetchNotes: () => void,
+  setError: SetterOrUpdater<boolean>,
+  setMessage: SetterOrUpdater<string>
+) {
+  try {
+    const archiveAPI = await axios.put(
+      `/api/undo/archive/${id}`,
+      { archive: false },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+      }
+    );
+    const archiveData = archiveAPI.data;
+    console.log(archiveData);
+    if (archiveData.error && archiveData.error != undefined) {
+      throw new Error(archiveData.error);
+    }
+    if (archiveData.message) {
+      fetchNotes();
+    }
+  } catch (err: any) {
+    setError(true);
+    setMessage(err.message);
+    setTimeout(() => {
+      setError(false);
+      setMessage("");
+    }, 5000);
+  }
+}
+
+async function deleteTodo(
+  id: string,
+  token: any,
+  fetchNotes: () => void,
+  setError: SetterOrUpdater<boolean>,
+  setMessage: SetterOrUpdater<string>
+) {
+  try {
+    const deleteAPI = await axios.put(
+      `/api/delete/${id}`,
+      { deleted: true },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+      }
+    );
+    const deleteData = deleteAPI.data;
+    console.log(deleteData);
+    if (deleteData.error && deleteData.error != undefined) {
+      throw new Error(deleteData.error);
+    }
+    if (deleteData.message) {
+      fetchNotes();
+    }
+  } catch (err: any) {
+    setError(true);
+    setMessage(err.message);
+    setTimeout(() => {
+      setError(false);
+      setMessage("");
+    }, 5000);
+  }
+}
+
+export async function undoDelete(
+  id: string,
+  token: any,
+  fetchNotes: () => void,
+  setError: SetterOrUpdater<boolean>,
+  setMessage: SetterOrUpdater<string>
+) {
+  try {
+    const deleteAPI = await axios.put(
+      `/api/undo/delete/${id}`,
+      { deleted: false },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+      }
+    );
+    const deleteData = deleteAPI.data;
+    console.log(deleteData);
+    if (deleteData.error && deleteData.error != undefined) {
+      throw new Error(deleteData.error);
+    }
+    if (deleteData.message) {
+      fetchNotes();
+    }
+  } catch (err: any) {
+    setError(true);
+    setMessage(err.message);
+    setTimeout(() => {
+      setError(false);
+      setMessage("");
+    }, 5000);
+  }
+}
+
+async function doneTodo(
+  id: string,
+  token: any,
+  fetchNotes: () => void,
+  setError: SetterOrUpdater<boolean>,
+  setMessage: SetterOrUpdater<string>
+) {
+  try {
+    const doneAPI = await axios.put(
+      `/api/done/${id}`,
+      { done: true },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+      }
+    );
+    const doneData = doneAPI.data;
+    console.log(doneData);
+    if (doneData.error && doneData.error != undefined) {
+      throw new Error(doneData.error);
+    }
+    if (doneData.message) {
+      fetchNotes();
+    }
+  } catch (err: any) {
+    setError(true);
+    setMessage(err.message);
+    setTimeout(() => {
+      setError(false);
+      setMessage("");
+    }, 5000);
+  }
+}
+
+export async function undoDone(
+  id: string,
+  token: any,
+  fetchNotes: () => void,
+  setError: SetterOrUpdater<boolean>,
+  setMessage: SetterOrUpdater<string>
+) {
+  try {
+    const doneAPI = await axios.put(
+      `/api/undo/done/${id}`,
+      { done: false },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+      }
+    );
+    const doneData = doneAPI.data;
+    console.log(doneData);
+    if (doneData.error && doneData.error != undefined) {
+      throw new Error(doneData.error);
+    }
+    if (doneData.message) {
+      fetchNotes();
+    }
+  } catch (err: any) {
+    setError(true);
+    setMessage(err.message);
+    setTimeout(() => {
+      setError(false);
+      setMessage("");
+    }, 5000);
+  }
 }

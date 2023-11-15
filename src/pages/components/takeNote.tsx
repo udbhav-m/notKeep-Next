@@ -1,8 +1,20 @@
 import { useTheme } from "next-themes";
 import { useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { descriptionState, normalNotes, titleState } from "../api/_atoms";
-import saveNotes from "../functionality/SaveNotes";
+import {
+  SetterOrUpdater,
+  useRecoilState,
+  useRecoilValue,
+  useSetRecoilState,
+} from "recoil";
+import {
+  descriptionState,
+  errorState,
+  messageState,
+  normalNotes,
+  titleState,
+} from "../api/_atoms";
+import axios from "axios";
+// import saveNotes from "../functionality/SaveNotes";
 
 export default function TakeNote(props: any) {
   const note = useRecoilValue(normalNotes);
@@ -11,7 +23,9 @@ export default function TakeNote(props: any) {
   const [close, setClose] = useState(false);
   const [title, setTitle] = useRecoilState(titleState);
   const [description, setDescription] = useRecoilState(descriptionState);
-  const { token, fetchNotes, setError, setMessage } = props;
+  const { token, fetchNotes } = props;
+  const setError = useSetRecoilState(errorState);
+  const setMessage = useSetRecoilState(messageState);
 
   const handleClose = () => {
     if (hide) {
@@ -102,4 +116,38 @@ export default function TakeNote(props: any) {
       </div>
     </div>
   );
+}
+
+async function saveNotes(
+  title: string,
+  description: string,
+  token: any,
+  fetchNotes: () => void,
+  setError: SetterOrUpdater<boolean>,
+  setMessage: SetterOrUpdater<string>
+) {
+  try {
+    const saveAPI = await axios.post(
+      "/api/createTodos",
+      { title, description },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+      }
+    );
+    const saveData = saveAPI.data;
+    if (saveData.error && saveData.error != undefined) {
+      throw new Error(saveData.error);
+    }
+    fetchNotes();
+  } catch (err: any) {
+    setError(true);
+    setMessage(err.message);
+    setTimeout(() => {
+      setError(false);
+      setMessage("");
+    }, 5000);
+  }
 }

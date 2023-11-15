@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 import Note from "./components/Note";
 import Overlay from "./components/Overlay";
 import { useToast } from "@/components/ui/use-toast";
-import getNotes from "./functionality/GetNotes";
+// import getNotes from "./functionality/GetNotes";
+import { SetterOrUpdater } from "recoil";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   archiveState,
@@ -15,6 +16,7 @@ import {
   normalNotes,
   trashState,
 } from "./api/_atoms";
+import axios from "axios";
 
 interface note {
   title: string;
@@ -77,17 +79,12 @@ export default function Home() {
   return (
     <>
       <div>
-        <Overlay />
+        <Overlay fetchNotes={fetchNotes} />
         <Appbar />
         <div className="flex gap-10">
           <Sidebar />
           <div className="flex flex-col w-full mt-6 justify-center gap-10 ">
-            <TakeNote
-              token={token}
-              setError={setError}
-              setMessage={setMessage}
-              fetchNotes={fetchNotes}
-            />
+            <TakeNote token={token} fetchNotes={fetchNotes} />
             <div className={` flex flex-col gap-3 ${!note ? "hidden" : ""}`}>
               <div className="flex flex-wrap gap-2 mr-1">
                 {notes
@@ -100,8 +97,6 @@ export default function Home() {
                           title={eachNote.title}
                           description={eachNote.description}
                           token={token}
-                          setError={setError}
-                          setMessage={setMessage}
                           fetchNotes={fetchNotes}
                         />
                       );
@@ -179,4 +174,39 @@ export default function Home() {
       </div>
     </>
   );
+}
+
+async function getNotes(
+  token: string,
+  setError: SetterOrUpdater<boolean>,
+  setMessage: SetterOrUpdater<string>
+) {
+  try {
+    const getAPI = await axios.get("/api/getTodos", {
+      headers: {
+        "Content-Type": "application/json",
+        token: token,
+      },
+    });
+    console.log(getAPI);
+    const getAPIData = getAPI.data;
+    if (getAPIData.error && getAPIData.error != undefined) {
+      throw new Error(getAPIData.error);
+    }
+    if (
+      getAPIData.todosFinal ||
+      getAPIData.doneTodos ||
+      getAPIData.deleted ||
+      getAPIData.archived
+    ) {
+      return getAPIData;
+    }
+  } catch (err: any) {
+    setError(true);
+    setMessage(err.message);
+    setTimeout(() => {
+      setError(false);
+      setMessage("");
+    }, 5000);
+  }
 }
