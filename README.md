@@ -3,17 +3,26 @@ Not-Keep is a full-stack notes app built with Next.js for the frontend, Recoil f
 
 # Features
 Create Notes: Add new notes with a title and description. 
+
 Read Notes: View a list of all notes with the option to mark them as done, edit, or delete.
+
 Update Notes: Edit existing notes to update titles or descriptions.
+
 Delete Notes: Permanently remove unwanted notes.
+
 Archive Notes: Archive completed or less relevant notes.
+
 Search Bar: Quickly find specific notes using the search functionality.
+
 Dark/Light Mode: Toggle between dark and light modes for a personalized experience.
 
 # Technologies Used
 Frontend: Next.js, Recoil, Tailwind CSS, Shadcdn UI.
+
 Backend: Node.js, Next.js.
+
 Authentication: JSON Web Tokens (JWT).
+
 Database: MongoDB
 
 # Usage
