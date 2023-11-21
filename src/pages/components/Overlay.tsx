@@ -88,7 +88,7 @@ export default function Overlay(props: any) {
                 ? "border border-neutral-800 bg-color"
                 : theme === "light"
                 ? "border bg-white"
-                : "border-none"
+                : "border-none "
             } `}
           >
             <input

@@ -14,6 +14,7 @@ import {
   errorState,
   messageState,
   normalNotes,
+  queryState,
   trashState,
 } from "./api/_atoms";
 import axios from "axios";
@@ -44,10 +45,12 @@ export default function Home() {
   const { toast } = useToast();
   const cookies = parseCookies();
   const token = cookies.token;
+  const query = useRecoilValue(queryState);
 
   const note = useRecoilValue(normalNotes);
   const archive = useRecoilValue(archiveState);
   const trash = useRecoilValue(trashState);
+  var searchItems: note[] = [];
 
   async function fetchNotes() {
     const data = await getNotes(token, setError, setMessage);
@@ -62,6 +65,48 @@ export default function Home() {
     }
     if (data.todoFinal) {
       setArchived(data.archived);
+    }
+  }
+
+  if (query) {
+    if (note) {
+      var notesSearch = notes.filter((item: note) => {
+        if (
+          item.title.toLowerCase().includes(query.toLocaleLowerCase()) ||
+          item.description.toLowerCase().includes(query.toLocaleLowerCase())
+        ) {
+          return item;
+        }
+      });
+      var doneSearch = done.filter((item: note) => {
+        if (
+          item.title.toLowerCase().includes(query.toLocaleLowerCase()) ||
+          item.description.toLowerCase().includes(query.toLocaleLowerCase())
+        ) {
+          return item;
+        }
+      });
+      searchItems = notesSearch.concat(doneSearch);
+    }
+    if (archive) {
+      searchItems = archived.filter((item: note) => {
+        if (
+          item.title.toLowerCase().includes(query.toLocaleLowerCase()) ||
+          item.description.toLowerCase().includes(query.toLocaleLowerCase())
+        ) {
+          return item;
+        }
+      });
+    }
+    if (trash) {
+      searchItems = deleted.filter((item: note) => {
+        if (
+          item.title.toLowerCase().includes(query.toLocaleLowerCase()) ||
+          item.description.toLowerCase().includes(query.toLocaleLowerCase())
+        ) {
+          return item;
+        }
+      });
     }
   }
 
@@ -85,7 +130,30 @@ export default function Home() {
           <Sidebar />
           <div className="flex flex-col w-full mt-6 justify-center gap-10 ">
             <TakeNote token={token} fetchNotes={fetchNotes} />
-            <div className={` flex flex-col gap-3 ${!note ? "hidden" : ""}`}>
+            <div
+              className={` flex flex-wrap gap-2 mr-1 ${!query ? "hidden" : ""}`}
+            >
+              {query
+                ? searchItems.map((eachNote: note) => {
+                    return (
+                      <Note
+                        key={eachNote._id.toString()}
+                        id={eachNote._id.toString()}
+                        done={eachNote.done}
+                        title={eachNote.title}
+                        description={eachNote.description}
+                        token={token}
+                        fetchNotes={fetchNotes}
+                      />
+                    );
+                  })
+                : "no search items"}
+            </div>
+            <div
+              className={` flex flex-col gap-3 ${
+                !note || query ? "hidden" : ""
+              }`}
+            >
               <div className="flex flex-wrap gap-2 mr-1">
                 {notes
                   ? notes.map((eachNote: note) => {
@@ -126,7 +194,7 @@ export default function Home() {
 
             <div
               className={`flex flex-wrap gap-2 mr-1 ${
-                !archive ? "hidden" : ""
+                !archive || query ? "hidden" : ""
               }`}
             >
               {archived
@@ -149,7 +217,9 @@ export default function Home() {
             </div>
 
             <div
-              className={`flex flex-wrap gap-2 mr-1 ${!trash ? "hidden" : ""}`}
+              className={`flex flex-wrap gap-2 mr-1 ${
+                !trash || query ? "hidden" : ""
+              }`}
             >
               {deleted
                 ? deleted.map((eachNote: note) => {

@@ -10,8 +10,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useRecoilState } from "recoil";
-import { sidebarState, userState } from "../api/_atoms";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { emailState, sidebarState, userState } from "../api/_atoms";
 import { useRouter } from "next/router";
 import { destroyCookie, parseCookies } from "nookies";
 
@@ -122,7 +122,7 @@ function KeepLogo(props: { handleRedirecting: () => void }) {
           alt=""
         />
         <h3
-          className={` verdana font-sans text-xl ${
+          className={` verdana font-sans text-xl hidden sm:block ${
             theme === "light" ? "text-gray-500" : ""
           }`}
         >

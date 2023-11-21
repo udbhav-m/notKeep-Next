@@ -92,6 +92,11 @@ export const overlayProps = atom({
   },
 });
 
+export const queryState = atom({
+  key: "queryState",
+  default: "",
+});
+
 // ************** Home - Inputs **************
 
 export const titleState = atom({
