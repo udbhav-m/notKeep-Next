@@ -40,7 +40,7 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="flex flex-col gap-7 p-3 pl-5 w-fit h-full">
+    <div className="flex flex-col gap-7 pt-3 pl-5 w-fit h-full sm:p-3">
       <Link
         onClick={() => handleNote()}
         className={`rounded-full h-10 gap-6 p-2 flex  items-center hover:bg-yellow-200 ${

@@ -49,7 +49,7 @@ export default function Note(props: any) {
 
   return (
     <div
-      className={`flex flex-col rounded-lg gap-3 w-60 group ${
+      className={`flex flex-col w-11/12 rounded-lg gap-3 sm:w-44 md:w-52 lg:w-58 xl:w-60 group ${
         theme === "dark"
           ? "border border-neutral-800"
           : theme === "light"
@@ -78,7 +78,7 @@ export default function Note(props: any) {
           {description}
         </div>
       </div>
-      <div className="flex pl-2 pb-1 gap-3 opacity-0 opacity-transition duration-200 group-hover:opacity-100">
+      <div className="flex pl-2 pb-1 gap-3 sm:opacity-0 opacity-transition duration-200 group-hover:opacity-100">
         <button
           onClick={() => {
             if (done) {
@@ -87,7 +87,13 @@ export default function Note(props: any) {
               handleDone();
             }
           }}
-          className={`p-2 rounded-full bg-opacity-95 hover:bg-zinc-800`}
+          className={`p-2 rounded-full bg-opacity-95 ${
+            theme === "dark"
+              ? "hover:bg-zinc-800"
+              : theme === "light"
+              ? "hover:bg-neutral-200"
+              : "hover:bg-transparent"
+          }`}
         >
           <svg
             fill="#6B6B6B"
@@ -109,7 +115,13 @@ export default function Note(props: any) {
               handleArchive();
             }
           }}
-          className={`p-2 rounded-full bg-opacity-95 hover:bg-zinc-800`}
+          className={`p-2 rounded-full bg-opacity-95 ${
+            theme === "dark"
+              ? "hover:bg-zinc-800"
+              : theme === "light"
+              ? "hover:bg-neutral-200"
+              : "hover:bg-transparent"
+          }`}
         >
           <svg
             fill="#6B6B6B"
@@ -129,7 +141,13 @@ export default function Note(props: any) {
               handleDelete();
             }
           }}
-          className={`p-2  rounded-full bg-opacity-95 hover:bg-zinc-800`}
+          className={`p-2 rounded-full bg-opacity-95 ${
+            theme === "dark"
+              ? "hover:bg-zinc-800"
+              : theme === "light"
+              ? "hover:bg-neutral-200"
+              : "hover:bg-transparent"
+          }`}
         >
           <svg
             fill="#6B6B6B"

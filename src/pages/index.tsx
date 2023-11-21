@@ -11,21 +11,21 @@ export default function Landing() {
   return (
     <>
       <Appbar />
-      <div className="flex flex-wrap gap-20 justify-center items-center">
+      <div className="flex flex-wrap gap-20 justify-center items-center p-10 sm:pt-5 sm:p-0">
         <div>
           <h1
-            className={` verdana font-sans text-5xl ${
+            className={`text-center lg:text-left verdana font-sans text-5xl ${
               theme === "light" ? "text-gray-500" : ""
             }`}
           >
             notKeep.
           </h1>
           <br />
-          <h1 className="text-4xl w-3/4">
+          <h1 className={`text-4xl text-center lg:w-3/4 lg:text-left`}>
             Where Forgetfulness Meets Organization.
           </h1>
         </div>
-        <div className="pt-24 pl-10">
+        <div className="flex justify-center lg:pt-24 lg:pl-10">
           <CardTab />
         </div>
       </div>

@@ -53,7 +53,7 @@ export default function TakeNote(props: any) {
       } flex flex-col justify-center w-full items-center`}
     >
       <div
-        className={`w-3/5 p-1 shadow-md rounded-lg  ${
+        className={`w-11/12 sm:w-3/5 p-1 shadow-md rounded-lg  ${
           theme === "dark"
             ? "border border-neutral-800"
             : theme === "light"

@@ -83,7 +83,7 @@ export default function Overlay(props: any) {
       <div className="z-50 fixed w-full h-screen bg-black bg-opacity-80 flex items-center">
         <div className={` flex flex-col justify-center w-full items-center`}>
           <div
-            className={`w-3/5 p-1 shadow-md rounded-lg  ${
+            className={`w-4/5 sm:w-3/5 p-1 shadow-md rounded-lg  ${
               theme === "dark"
                 ? "border border-neutral-800 bg-color"
                 : theme === "light"

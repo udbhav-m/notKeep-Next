@@ -98,7 +98,7 @@ function KeepLogo(props: { handleRedirecting: () => void }) {
         }}
       >
         <svg
-          className={` ${path === "/" ? "hidden" : ""}`}
+          className={` ${path === "/" ? "hidden" : "hidden sm:block"}`}
           fill="#6B6B6B"
           xmlns="http://www.w3.org/2000/svg"
           x="0px"

@@ -6,13 +6,13 @@ export default function Search(props: { path: any }) {
   return (
     <>
       <input
-        className={`w-8/12 h-15 p-2 shadow rounded-lg border-color focus:outline-none focus:bg-white ${
+        className={`w-8/12 h-15 p-2 shadow rounded-lg border-color focus:outline-none focus:bg-white  ${
           theme === "dark"
             ? "bg-gray-700"
             : theme === "light"
             ? "bg-neutral-100"
             : "bg-transparent"
-        } ${path === "/" ? "hidden" : ""}`}
+        } ${path === "/" ? "hidden" : "hidden sm:block"}`}
         type="text"
         placeholder="Search todos"
       />
