@@ -55,7 +55,7 @@ export default function CardTab() {
                 <Input
                   onChange={(e) => setEmail(e.target.value)}
                   id="emailL"
-                  placeholder="thelol@gmail.com"
+                  placeholder="lol@gmail.com"
                 />
               </div>
               <div className="space-y-1">
