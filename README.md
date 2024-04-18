@@ -28,4 +28,4 @@ Database: MongoDB
 # Usage
 Register or log in to your account.
 Start creating, updating, and managing your notes.
-Enjoy a seamless user experience with the clean and intuitive UI.
+
